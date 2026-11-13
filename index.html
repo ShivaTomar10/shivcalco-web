@@ -4,31 +4,182 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ShivCalco | Advanced Laboratory & Molecular Biology Calculator</title>
-  <meta name="description" content="Free online Advanced Laboratory Calculator for PCR master mix, DNA Tm & reverse complement, molarity, serial dilution, RCF/RPM centrifugation, and PDF/image tools." />
-  <meta name="keywords" content="ShivCalco, lab calculator, PCR master mix calculator, DNA melting temperature, molarity calculator, serial dilution calculator, RCF to RPM converter" />
-  <link rel="canonical" href="https://shivcalculator.streamlit.app" />
+  <meta name="description" content="Free online Advanced Laboratory Calculator for molecular biology, PCR master mix, DNA Tm & reverse complement, protein translation, molarity, serial dilution, RCF/RPM centrifugation, and hemocytometer cell counting." />
+  <meta name="keywords" content="ShivCalco, lab calculator, PCR master mix calculator, DNA melting temperature, molarity calculator, serial dilution calculator, RCF to RPM converter, hemocytometer cell counter" />
+  <link rel="canonical" href="https://shivcalco.top" />
+  <script src="https://unpkg.com"></script>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      background-color: #0e1117;
+    :root {
+      --bg: #0b1120; --panel: #111827; --border: #1f2937; --text: #f8fafc;
+      --muted: #94a3b8; --accent: #06b6d4; --accent-hover: #22d3ee; --metric-bg: #162032;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      height: 100%;
-      display: block;
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.5; }
+    .container { max-width: 1380px; margin: 0 auto; padding: 1rem 1.25rem 3rem; }
+    .hero {
+      padding: 1.1rem 1.4rem; border-radius: 12px;
+      background: linear-gradient(115deg, #10243a, #164e63);
+      color: #f8fafc; margin-bottom: 1rem; border: 1px solid #1e3a5f;
     }
+    .hero h1 { margin: 0 0 0.25rem; font-size: 1.75rem; }
+    .hero p { margin: 0; color: #dbeafe; font-size: 0.95rem; }
+
+    /* Tabs */
+    .tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; border-bottom: 1px solid var(--border); padding-bottom: 0.6rem; margin-bottom: 1.1rem; }
+    .tab-btn {
+      background: var(--panel); color: var(--muted); border: 1px solid var(--border);
+      padding: 0.55rem 0.95rem; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+    }
+    .tab-btn.active { background: var(--accent); color: #082f49; border-color: var(--accent); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Cards & Layout */
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.15rem; margin-bottom: 1rem; }
+    .card h2 { margin: 0 0 0.4rem; font-size: 1.2rem; color: #38bdf8; }
+    .caption { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.75rem; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem; }
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.75rem; margin: 0.75rem 0; }
+    .metric { background: var(--metric-bg); border: 1px solid #26354d; padding: 0.75rem 0.9rem; border-radius: 9px; }
+    .metric-label { font-size: 0.8rem; color: var(--muted); }
+    .metric-val { font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 0.15rem; }
+
+    /* Inputs & Buttons */
+    label { display: block; font-size: 0.83rem; color: #cbd5e1; margin-bottom: 0.25rem; font-weight: 500; }
+    input, select, textarea {
+      width: 100%; background: #0f172a; color: #f8fafc; border: 1px solid #334155;
+      border-radius: 7px; padding: 0.48rem 0.65rem; font-size: 0.92rem; margin-bottom: 0.6rem;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--accent); }
+    .btn {
+      background: #1e293b; color: #f8fafc; border: 1px solid #334155;
+      padding: 0.45rem 0.9rem; border-radius: 7px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-primary { background: var(--accent); color: #082f49; border: none; }
+    .btn-primary:hover { background: var(--accent-hover); color: #082f49; }
+    .code-box {
+      background: #090d16; border: 1px solid #1e293b; padding: 0.65rem 0.85rem;
+      border-radius: 7px; font-family: monospace; word-break: break-all; margin: 0.4rem 0 0.7rem; color: #38bdf8;
+    }
+    .alert { padding: 0.65rem 0.9rem; border-radius: 8px; font-size: 0.88rem; margin: 0.5rem 0; }
+    .alert-warn { background: #422006; border: 1px solid #854d0e; color: #fef08a; }
+    .alert-err { background: #450a0a; border: 1px solid #991b1b; color: #fecaca; }
+    .alert-ok { background: #052e16; border: 1px solid #166534; color: #bbf7d0; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin: 0.6rem 0; font-size: 0.88rem; }
+    th, td { border: 1px solid #1e293b; padding: 0.5rem; text-align: center; }
+    th { background: #162032; color: #38bdf8; }
+    td input, td select { margin-bottom: 0; padding: 0.32rem 0.45rem; }
+    footer { margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.2rem; color: var(--muted); font-size: 0.88rem; }
   </style>
 </head>
 <body>
-  <iframe
-    src="https://streamlit.app"
-    title="ShivCalco Laboratory Calculator"
-    allow="clipboard-read; clipboard-write"
-  ></iframe>
-</body>
-</html>
+<div class="container">
+  <div class="hero">
+    <h1>🧪 ShivCalco — Advanced Laboratory Calculator</h1>
+    <p>Practical molecular biology, solution, buffer, centrifugation, and laboratory utilities in one fast workspace.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="openTab(0)">🧬 Molecular Biology</button>
+    <button class="tab-btn" onclick="openTab(1)">📊 Solution & Dilution</button>
+    <button class="tab-btn" onclick="openTab(2)">🧫 Buffer & Media</button>
+    <button class="tab-btn" onclick="openTab(3)">🔧 General Utilities</button>
+    <button class="tab-btn" onclick="openTab(4)">🗂️ File & Image Tools</button>
+    <button class="tab-btn" onclick="openTab(5)">📚 History & Reports</button>
+  </div>
+
+  <!-- TAB 0: MOLECULAR BIOLOGY -->
+  <div class="tab-content active" id="tab-0">
+    <div class="card">
+      <h2>DNA Sequence Analyzer</h2>
+      <label>DNA sequence (5′ → 3′)</label>
+      <input type="text" id="dna_seq" value="ATCGATCGATCGATCGATCGATCGATCGATCG" oninput="calcDNA()" />
+      <div id="dna_warn"></div>
+      <div class="metrics" id="dna_metrics"></div>
+      <div class="caption" id="dna_counts"></div>
+      <label>Reverse complement (5′ → 3′)</label>
+      <div class="code-box" id="dna_rc"></div>
+      <div class="metrics" id="dna_tm"></div>
+      <div class="caption">Use Wallace for short sequences (≤20 nt), and the basic GC estimate for longer sequences.</div>
+      <button class="btn" onclick="downloadFasta()">⬇️ Download FASTA</button>
+      <button class="btn" onclick="saveDnaHistory()">＋ Save DNA Analysis</button>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h2>DNA → RNA Transcription</h2>
+        <label>Coding-strand DNA (5′ → 3′)</label>
+        <input type="text" id="rna_in" placeholder="ATGCGT..." oninput="calcRNA()" />
+        <div id="rna_err"></div>
+        <div class="code-box" id="rna_out">—</div>
+        <button class="btn" onclick="saveRnaHistory()">＋ Save Transcription</button>
+      </div>
+
+      <div class="card">
+        <h2>DNA → Protein Translation</h2>
+        <div class="grid-2">
+          <div>
+            <label>Coding DNA sequence (5′ → 3′)</label>
+            <input type="text" id="prot_in" placeholder="ATGGCCATTGTA..." oninput="calcProtein()" />
+          </div>
+          <div>
+            <label>Reading frame</label>
+            <select id="prot_frame" onchange="calcProtein()">
+              <option value="1">Frame 1</option>
+              <option value="2">Frame 2</option>
+              <option value="3">Frame 3</option>
+            </select>
+          </div>
+        </div>
+        <div id="prot_err"></div>
+        <div class="caption" id="prot_info">Translated codons: 0</div>
+        <div class="code-box" id="prot_out">—</div>
+        <button class="btn" onclick="saveProtHistory()">＋ Save Translation</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Amino-Acid Sequence Calculator</h2>
+      <div class="caption">Approximate average mass for a linear peptide with free N- and C-termini.</div>
+      <label>Protein sequence (one-letter code)</label>
+      <input type="text" id="aa_in" placeholder="Example: MKWVTFISLL..." oninput="calcAA()" />
+      <div id="aa_err"></div>
+      <div class="metrics" id="aa_metrics"></div>
+      <div id="aa_table"></div>
+      <button class="btn" onclick="saveAAHistory()">＋ Save Amino-Acid Analysis</button>
+    </div>
+
+    <div class="card">
+      <h2>PCR Master Mix — Concentration-Based (C₁V₁ = C₂V₂)</h2>
+      <div class="grid-3">
+        <div><label>Number of reactions</label><input type="number" id="pcr_n" value="10" min="1" oninput="calcPCR()" /></div>
+        <div><label>Reaction volume (µL)</label><input type="number" id="pcr_vol" value="25" step="any" oninput="calcPCR()" /></div>
+        <div><label>Overage (%)</label><input type="number" id="pcr_over" value="10" step="any" oninput="calcPCR()" /></div>
+      </div>
+      <div style="max-width:260px">
+        <label>Optional magnesium salt</label>
+        <select id="pcr_mg" onchange="renderPcrRows(); calcPCR();">
+          <option value="MgCl₂">MgCl₂</option>
+          <option value="MgSO₄">MgSO₄</option>
+        </select>
+      </div>
+      <table>
+        <thead><tr><th>Reagent</th><th>Stock</th><th>Working</th><th>Unit</th><th>Volume / rxn (µL)</th><th>Total + Overage (µL)</th></tr></thead>
+        <tbody id="pcr_body"></tbody>
+      </table>
+      <div class="metrics" id="pcr_metrics"></div>
+      <div id="pcr_msg"></div>
+      <button class="btn" onclick="savePcrHistory()">＋ Save PCR Calculation</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: SOLUTION & DILUTION -->
+  <div class="tab-content" id="tab-1">
+    <div class="grid-2">
+      <div class="card">
+        <h2>Fixed-Solvent Dilution</h2>
+        <div class="caption">Formula: V₁ = (C₂ × Vₛ) / (C₁ − C₂)</div>
