@@ -4,106 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ShivCalco | Advanced Laboratory & Molecular Biology Calculator</title>
-  <meta name="description" content="Free online Advanced Laboratory Calculator for molecular biology, PCR master mix, DNA Tm & reverse complement, molarity, serial dilution, RCF/RPM centrifugation, and PDF/image tools." />
-  <meta name="keywords" content="ShivCalco, lab calculator, PCR master mix calculator, DNA melting temperature, molarity calculator, serial dilution calculator, RCF to RPM converter, hemocytometer cell counter" />
+  <meta name="description" content="Free online Advanced Laboratory Calculator for PCR master mix, DNA Tm & reverse complement, molarity, serial dilution, RCF/RPM centrifugation, and PDF/image tools." />
+  <meta name="keywords" content="ShivCalco, lab calculator, PCR master mix calculator, DNA melting temperature, molarity calculator, serial dilution calculator, RCF to RPM converter" />
   <link rel="canonical" href="https://shivcalco.top" />
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ShivCalco - Advanced Laboratory Calculator",
-    "url": "https://shivcalco.top",
-    "applicationCategory": "ScienceApplication, EducationalApplication",
-    "operatingSystem": "All",
-    "description": "Free online molecular biology and laboratory calculator for PCR master mix, DNA analysis, molarity, dilutions, centrifugation RCF/RPM, and file utilities.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "INR"
-    }
-  }
-  </script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #0b1120; color: #f8fafc; line-height: 1.6; }
-    .container { max-width: 1050px; margin: 0 auto; padding: 2.5rem 1.25rem; }
-    .hero {
-      background: linear-gradient(125deg, #0f2942, #164e63);
-      border: 1px solid #1e3a5f;
-      border-radius: 16px;
-      padding: 3rem 2rem;
-      text-align: center;
-      margin-bottom: 2.5rem;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background-color: #0e1117;
     }
-    .hero h1 { font-size: 2.3rem; margin-bottom: 0.75rem; color: #ffffff; }
-    .hero p { font-size: 1.1rem; color: #cbd5e1; max-width: 720px; margin: 0 auto 1.8rem; }
-    .btn-primary {
-      display: inline-block;
-      background: #06b6d4;
-      color: #082f49;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 0.9rem 2.2rem;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: transform 0.15s ease, background 0.15s ease;
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+      display: block;
     }
-    .btn-primary:hover { background: #22d3ee; transform: translateY(-2px); }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 2.5rem;
-    }
-    .card {
-      background: #111827;
-      border: 1px solid #1f2937;
-      border-radius: 12px;
-      padding: 1.4rem;
-    }
-    .card h3 { color: #38bdf8; margin-bottom: 0.5rem; font-size: 1.1rem; }
-    .card p { color: #94a3b8; font-size: 0.95rem; }
-    footer {
-      text-align: center;
-      color: #64748b;
-      font-size: 0.9rem;
-      border-top: 1px solid #1f2937;
-      padding-top: 1.5rem;
-    }
-    footer a { color: #38bdf8; text-decoration: none; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <section class="hero">
-      <h1>🧪 ShivCalco</h1>
-      <p>Fast, accurate online laboratory calculator for molecular biology, PCR master mix setup, DNA sequence analysis, molarity, dilutions, centrifugation, and research file tools.</p>
-      <a href="https://streamlit.app" class="btn-primary">🚀 Launch Laboratory Calculator</a>
-    </section>
-
-    <section class="grid">
-      <div class="card">
-        <h3>🧬 PCR & DNA Sequence Tools</h3>
-        <p>Calculate reaction master mixes with overage, primer melting temperature (Tm), GC content, molecular weight, and reverse complement sequences.</p>
-      </div>
-      <div class="card">
-        <h3>⚗️ Molarity & Serial Dilutions</h3>
-        <p>Compute solution mass, stock-to-working dilutions (C1V1 = C2V2), serial dilution tables, and percentage weight/volume preparations instantly.</p>
-      </div>
-      <div class="card">
-        <h3>🔄 Centrifugation & Cell Counting</h3>
-        <p>Convert between RCF (×g) and RPM using rotor radius, and calculate cell concentration and viability from hemocytometer counts.</p>
-      </div>
-      <div class="card">
-        <h3>📄 Lab PDF & Image Utilities</h3>
-        <p>Merge, split, and compress gel electrophoresis images and research PDFs right inside your browser workflow.</p>
-      </div>
-    </section>
-
-    <footer>
-      <p>© 2026 ShivCalco · Built for Students, Researchers & Lab Professionals · <a href="https://razorpay.me" target="_blank" rel="noopener">Support this free tool</a></p>
-    </footer>
-  </div>
+  <iframe
+    src="https://streamlit.app"
+    title="ShivCalco Laboratory Calculator"
+    allow="clipboard-read; clipboard-write"
+  ></iframe>
 </body>
 </html>
